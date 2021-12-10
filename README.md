@@ -25,3 +25,16 @@
 [Part 1] Epsilon rate: ε = 1300. Gamma rate: γ = 2795. Power consumption: 3633500.
 [Part 2] Oxygen generator rating: 1327. CO2 scrubber rating: 3429. Life support rating: 4550283.
 ```
+
+### Day 4
+```
+> python day04.py
+
+[Part 1] Board #64 wins with a score of 58838.
+  Board #64 wins in col 2:
+  86    80      77      18      87
+  79    93      52      17      20
+  30    68      48      12      91
+  25    98      13      9       47
+  45    73      97      15      59
+```
