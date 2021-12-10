@@ -1,12 +1,15 @@
 ## Advent of Code 2021: Day 4
 ## https://adventofcode.com/2021/day/4
 ## Jesse Williams | github.com/xram64
-## Answers: [Part 1]: 58838, [Part 2]:
+## Answers: [Part 1]: 58838, [Part 2]: 6256
 
 from math import floor
 
 class Board():
-    def __init__(self, raw_board):
+    def __init__(self, raw_board, id):
+        self.id = id    # original position of board in list of boards
+        self.score = 0  # final score of a winning board
+
         # The grid will be a 2D list indexed by board.grid[row][col]
         self.grid = []
         for line in raw_board:
@@ -20,10 +23,9 @@ class Board():
         #   win = ('row', 0, ['1', ..., '5']), or win = ('col', 0, ['1', ..., '5'])
         self.win = False
 
-        # Keep track of the last number for score calculation
+        # Keep track of the last checked number, freezing if the board wins (for score calculation)
         self.last_checked_number = 0
 
-        self.score = 0
 
     def check_number(self, num):
         # Checks if the given bingo number appears on this board and marks it if so
@@ -95,23 +97,32 @@ if __name__ == '__main__':
         raw_boards.append( [c.strip() for c in board_data[(6*i + 1):(6*i + 6)]] )
 
     boards = []
-    for raw_board in raw_boards:
-        boards.append( Board(raw_board) )
+    for id, raw_board in enumerate(raw_boards):
+        boards.append( Board(raw_board, id) )
 
-    done = False
+    # Check all numbers and keep track of winning boards in order of win, along with their board number
+    winning_boards = []
     for number in numbers:
-        for n, board in enumerate(boards):
-            if board.check_number(number):
+        for board in boards:
+            # Skip checking boards that won to make sure we don't keep changing their 'last_checked_number'
+            if (board not in winning_boards) and (board.check_number(number)):
                 # If we got True, the number is on the board, so now we check if the board won
                 if board.check_for_win():
-                    # If we don't get False, this board won, and we have a tuple with the winning row/col
-                    print(f"[Part 1] Board #{str(n+1)} wins with a score of {str(board.calculate_score())}.")
-                    print(f"  Board #{str(n+1)} wins in {board.win[0]} {board.win[1]+1}: ")
-                    for row in board.grid:
-                        print("  " + "\t".join(row))
-                    print()
+                    # If we don't get False, this board won
+                    winning_boards.append(board)
 
-                    done = True
-                    break
-        if done:
-            break
+    ## Part 1
+    first_winning_board = winning_boards[0]
+    print(f"[Part 1] Board #{first_winning_board.id + 1} wins first with a score of {str(first_winning_board.calculate_score())}.")
+    print(f"  Board #{first_winning_board.id + 1} wins in {first_winning_board.win[0]} {first_winning_board.win[1]+1}: ")
+    for row in first_winning_board.grid:
+        print("  " + "\t".join(row))
+    print()
+
+    ## Part 2
+    last_winning_board = winning_boards[-1]
+    print(f"[Part 2] Board #{last_winning_board.id + 1} wins last with a score of {str(last_winning_board.calculate_score())}.")
+    print(f"  Board #{last_winning_board.id + 1} wins in {last_winning_board.win[0]} {last_winning_board.win[1]+1}: ")
+    for row in last_winning_board.grid:
+        print("  " + "\t".join(row))
+    print()

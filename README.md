@@ -30,11 +30,19 @@
 ```
 > python day04.py
 
-[Part 1] Board #64 wins with a score of 58838.
+[Part 1] Board #64 wins first with a score of 58838.
   Board #64 wins in col 2:
   86    80      77      18      87
   79    93      52      17      20
   30    68      48      12      91
   25    98      13      9       47
   45    73      97      15      59
+
+[Part 2] Board #25 wins last with a score of 6256.
+  Board #25 wins in row 5:
+  17    16      10      68      76
+  2     45      94      29      40
+  1     54      60      66      93
+  0     13      42      39      70
+  6     82      46      74      43
 ```
