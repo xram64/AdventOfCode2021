@@ -46,3 +46,15 @@
   0     13      42      39      70
   6     82      46      74      43
 ```
+
+### Day 5
+```
+> python day05.py
+
+[Part 1] There are 5690 points where two or more horizontal or vertical lines overlap.
+[Part 2] There are 17741 points where two or more lines of any kind overlap.
+```
+
+![Day 5, Part 1](day05/day05_part1.png)
+
+![Day 5, Part 2](day05/day05_part2.png)
