@@ -97,7 +97,7 @@ if __name__ == '__main__':
     img_part2 = Image.new('L', (GRID_W, GRID_H), 255)
 
     # Map each value in the grid to a color value, darker for higher values
-    # https://www.desmos.com/calculator/7ns7ivkpgm
+    # https://www.desmos.com/calculator/af3ywlndbh
     def color_map(n):
         return int(2**(-n+8) - 1)
 
