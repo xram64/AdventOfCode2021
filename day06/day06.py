@@ -6,7 +6,7 @@
 from time import time
 
 DAYS_PART1 = 80
-DAYS_PART2 = 180
+DAYS_PART2 = 256
 
 def advance(age):
     # Returns a tuple with the new age of the current fish, followed by the
@@ -24,34 +24,30 @@ def count_spawns(age, remaining_days):
     # This will be passed up to the previous level to be added to the grand total.
     total_spawns = 0
 
+    # Pre-calculate common expression
+    this_fish_remaining_days = remaining_days - (age+1)
+
     if remaining_days > age:
         # If this fish will spawn at least one additional fish, calculate how many will be spawned in total.
-        fish_spawned = int( (remaining_days - (age+1))/7 + 1 )
         # https://www.desmos.com/calculator/lumde55zpk
+        fish_spawned = int( this_fish_remaining_days/7 + 1 )
+        total_spawns += fish_spawned
     else:
         # Otherwise, end the recursion by passing back 0 (the for loop will be skipped).
         fish_spawned = 0
 
-    total_spawns += fish_spawned
+    # If this is the first fish spawned by the given fish, use the given fish's
+    #   starting age to determine how long it takes the next fish to spawn.
+    # If the given fish has already spawned one fish, the second or later
+    #   fish should always spawn after a multiple of 7 (6+1) days.
+    # For initial fish, age ∈ [1,5]. For spawned fish, age = 8.
 
     # If we got at least one spawn, run this function again on each new fish.
     for n in range(fish_spawned):
-        #print(f"Checking n = {n} of {fish_spawned-1}... [r_days = {remaining_days} | age = {age}]")
-        if (n == 0):
-            # If this is the first fish spawned by the given fish, use the given fish's
-            #   starting age to determine how long it takes the next fish to spawn.
-            # For initial fish, age ∈ [1,5]. For spawned fish, age = 8.
-            first_spawned_fish_days = remaining_days - (age+1)
+        next_fish_remaining_days = this_fish_remaining_days - 7*n
 
-            # A spawned fish will have an initial age of 8 (zero-indexed).
-            total_spawns += count_spawns(8, first_spawned_fish_days)
-        else:
-            # If the given fish has already spawned one fish, the second or later
-            #   fish should always spawn after a multiple of 7 (6+1) days.
-            subsequent_spawned_fish_days = first_spawned_fish_days - n*(6+1)
-
-            # A spawned fish will have an initial age of 8 (zero-indexed).
-            total_spawns += count_spawns(8, subsequent_spawned_fish_days)
+        # A spawned fish will have an initial age of 8 (zero-indexed).
+        total_spawns += count_spawns(8, next_fish_remaining_days)
 
     return total_spawns
 
@@ -84,7 +80,6 @@ if __name__ == '__main__':
     ## Part 2
     full_count = 0
     fishes = fish_list.copy()
-
     i = 0
 
     # For each fish, calculate the number of "roll-overs" the age would take within 256 days,
