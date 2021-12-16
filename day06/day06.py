@@ -1,7 +1,7 @@
 ## Advent of Code 2021: Day 6
 ## https://adventofcode.com/2021/day/6
 ## Jesse Williams | github.com/xram64
-## Answers: [Part 1]: 390011, [Part 2]:
+## Answers: [Part 1]: 390011, [Part 2]: 1746710169834
 
 from time import time
 
