@@ -67,3 +67,11 @@
 [Part 1] After 80 days, there are 390011 lanternfish. [Took 0.13s]
 [Part 2] After 256 days, there are 1746710169834 lanternfish. [Took 50935.51s]
 ```
+
+### Day 7
+```
+> python day07.py
+
+[Part 1] Final horizontal position: 330. Total fuel consumed: 329389.
+[Part 2] Final horizontal position: 459. Total fuel consumed: 86397080.
+```
