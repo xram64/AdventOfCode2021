@@ -77,6 +77,7 @@ DIGIT = [DIGIT_0, DIGIT_1, DIGIT_2, DIGIT_3, DIGIT_4, DIGIT_5, DIGIT_6, DIGIT_7,
 class Display():
     def __init__(self, tests, outputs):
         self.outputs = outputs
+        self.output_digits = None
 
         # Fill a dict with the letter sequences for each length of segment string
         letter_sequences = {2:[], 3:[], 4:[], 5:[], 6:[], 7:[]}
@@ -151,7 +152,7 @@ class Display():
         self.segmentFor = {self.N: Seg.N, self.NW: Seg.NW, self.NE: Seg.NE, self.C: Seg.C, self.SW: Seg.SW, self.SE: Seg.SE, self.S: Seg.S}
 
 
-    def getOutputNumbers(self):
+    def _parseOutputNumbers(self):
         # Returns a list of the numbers found in the output
         output_digits = []
 
@@ -169,7 +170,16 @@ class Display():
                     output_digits.append(n)
                     break
 
-        return output_digits
+        self.output_digits = output_digits
+
+    def getOutputNumbers(self):
+        if not self.output_digits:
+            # If we haven't already parsed the numbers, do it now
+            self._parseOutputNumbers()
+            return self.output_digits
+        else:
+            # Otherwise, return the stored numbers
+            return self.output_digits
 
 
     def formatOutputNumbers(self):
@@ -231,6 +241,7 @@ if __name__ == '__main__':
 
 
     count = 0
+    sum = 0
     printout = ""
 
     for signal_line in signals:
@@ -243,12 +254,23 @@ if __name__ == '__main__':
         # Collect a printout of all numbers
         printout += disp.formatOutputNumbers() + "\n\n"
 
+
         ## Part 1
         for n in disp.getOutputNumbers():
             if n in [1, 4, 7, 8]:
                 count += 1
 
+
+        ## Part 2
+        numstr = ''
+        for n in disp.getOutputNumbers():
+            numstr += str(n)
+        sum += int(numstr)
+
+
     with open('day08_output.txt', 'w') as f:
         f.write(printout)
 
-    print(f"[Part 1] There are {count} occurences of the digits '1', '4', '7', or '8'.")
+    print(f"[Part 1] There are {count} occurrences of the digits '1', '4', '7', or '8'.")
+
+    print(f"[Part 2] The sum of all output numbers is {sum}.")
