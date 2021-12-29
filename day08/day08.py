@@ -1,7 +1,7 @@
 ## Advent of Code 2021: Day 8
 ## https://adventofcode.com/2021/day/8
 ## Jesse Williams | github.com/xram64
-## Answers: [Part 1]: 470, [Part 2]:
+## Answers: [Part 1]: 470, [Part 2]: 989396
 
 from enum import Enum, auto
 
