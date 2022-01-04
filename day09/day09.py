@@ -5,8 +5,9 @@
 
 import numpy as np
 from collections import namedtuple
+from PIL import Image
 
-# [Scan over all locations, recording any local minima found within each location's L₁-norm neighborhood (with radius 1).]
+# [Part 1: Scan over all locations, recording any local minima found within each location's L₁-norm neighborhood (with radius 1).]
 
 Dims = namedtuple('Dimensions', ['rows', 'cols'])
 Pos = namedtuple('Position', ['y', 'x'])  # reversed axes to match row-col order
@@ -44,9 +45,33 @@ def findRiskLevel(map, pos, dims):
         return (1 + map[pos])
 
 
+def constructGradient(stops):
+    # Expects a list of four RGB colors with format '#ffffff'
+    if len(stops) != 4: raise ValueError('Expects 4 color stops.')
+
+    # Parse colors into components
+    stopComps = []
+    for stop in stops:
+        stopComps.append( (int(stop[1:3], 16), int(stop[3:5], 16), int(stop[5:7], 16)) )
+
+    gradient = [0]*10
+
+    gradient[0] = stopComps[0]
+    gradient[3] = stopComps[1]
+    gradient[6] = stopComps[2]
+    gradient[9] = stopComps[3]
+
+    for i in [0, 1, 2]:
+        step_r = int( abs(stopComps[i+1][0] - stopComps[i][0]) / 3 )  # r
+        step_g = int( abs(stopComps[i+1][1] - stopComps[i][1]) / 3 )  # g
+        step_b = int( abs(stopComps[i+1][2] - stopComps[i][2]) / 3 )  # b
+        gradient[3*i+1] = tuple(map( lambda x,y: x+y, stopComps[i], (step_r, step_g, step_b) ))
+        gradient[3*i+2] = tuple(map( lambda x,y: x+y, stopComps[i], (2*step_r, 2*step_g, 2*step_b) ))
+
+    return gradient
+
 
 if __name__ == '__main__':
-
     with open('day09_input.txt', 'r') as f:
         temparray = []
         for line in f.readlines():
@@ -70,3 +95,22 @@ if __name__ == '__main__':
             if (risk > 0): low_point_count += 1
 
     print(f"[Part 1] There are {low_point_count} low points in the heightmap with a total risk level of {total_risk_level}.")
+
+    # Create image of heightmap
+    img_heightmap = Image.new('RGB', (heightmap_dims.cols, heightmap_dims.rows))
+    img_heightmap_scale = 4
+
+    gradient = constructGradient(['#555555', '#8e6810', '#ac590b', '#a43111'])
+    colormap = {}
+    for n, color in enumerate(gradient):
+        colormap[n] = color
+
+    for j in range(heightmap_dims.rows):
+        for i in range(heightmap_dims.cols):
+            img_heightmap.putpixel( (i, j), colormap[heightmap[i,j]])
+
+    img_heightmap = img_heightmap.resize((img_heightmap_scale*heightmap_dims.cols, img_heightmap_scale*heightmap_dims.rows), resample=Image.NEAREST)
+    img_heightmap.save('day09_heightmap.png')
+
+
+    ## Part 2

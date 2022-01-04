@@ -143,3 +143,5 @@
 
 [Part 1] There are 206 low points in the heightmap with a total risk level of 444.
 ```
+
+![Day 9 - Height Map](day09/day09_heightmap.png)
