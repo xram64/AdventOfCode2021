@@ -136,3 +136,10 @@
 ### ### ### ###
 
 ```
+
+### Day 9
+```
+> python day09.py
+
+[Part 1] There are 206 low points in the heightmap with a total risk level of 444.
+```
