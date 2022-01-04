@@ -107,10 +107,12 @@ if __name__ == '__main__':
 
     for j in range(heightmap_dims.rows):
         for i in range(heightmap_dims.cols):
-            img_heightmap.putpixel( (i, j), colormap[heightmap[i,j]])
+            img_heightmap.putpixel( (i, j), colormap[heightmap[j,i]])
 
     img_heightmap = img_heightmap.resize((img_heightmap_scale*heightmap_dims.cols, img_heightmap_scale*heightmap_dims.rows), resample=Image.NEAREST)
     img_heightmap.save('day09_heightmap.png')
 
 
     ## Part 2
+    # Idea: Make all numbers in heightmap within [0,8] snap to 8, so that map only has 8's and 9's (or convert them into 0/1).
+    #       Effectively, "push in" all of the lower areas so that all basins are exactly 1 level below the surface.
