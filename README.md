@@ -144,5 +144,8 @@
 [Part 1] There are 206 low points in the heightmap with a total risk level of 444.
 [Part 2] The three largest basins are 107 at (90, 62), 105 at (17, 21), and 104 at (92, 25), with a product of 1168440.
 ```
-
+#### [Part 1] Height Map
 ![Day 9 - Height Map](day09/day09_heightmap.png)
+
+#### [Part 2] Basin Scanning
+![Day 9 - Basin Scanning](day09/anim/day09_basinscan_800_med.png)
