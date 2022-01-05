@@ -142,6 +142,7 @@
 > python day09.py
 
 [Part 1] There are 206 low points in the heightmap with a total risk level of 444.
+[Part 2] The three largest basins are 107 at (90, 62), 105 at (17, 21), and 104 at (92, 25), with a product of 1168440.
 ```
 
 ![Day 9 - Height Map](day09/day09_heightmap.png)
