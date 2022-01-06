@@ -155,4 +155,5 @@
 > python day10.py
 
 [Part 1] Out of 94 lines, 47 are corrupted, 47 are incomplete, and 0 are valid. The total syntax error score is 311949.
+[Part 2] The middle score for incomplete lines is 3042730309.
 ```

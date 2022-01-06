@@ -1,10 +1,11 @@
 ## Advent of Code 2021: Day 10
 ## https://adventofcode.com/2021/day/10
 ## Jesse Williams | github.com/xram64
-## Answers: [Part 1]: 311949, [Part 2]:
+## Answers: [Part 1]: 311949, [Part 2]: 3042730309
 
 from collections import namedtuple, deque
 from enum import Enum, auto
+from math import ceil
 
 Bounds = namedtuple('Bounds', ['left', 'right'])
 
@@ -13,11 +14,21 @@ class Status(Enum):
     Incomplete = auto()
     Valid = auto()
 
-illegal_char_score = {')': 3, ']': 57, '}': 1197, '>': 25137}
+corrupted_char_score = {')': 3, ']': 57, '}': 1197, '>': 25137}
+incomplete_char_score = {')': 1, ']': 2, '}': 3, '>': 4}
 
 char_pairs = {'(': ')', '[': ']', '{': '}', '<': '>'}
 open_chars = list(char_pairs.keys())
 close_chars = list(char_pairs.values())
+
+
+def getLineScore(chars):
+    global incomplete_char_score
+    score = 0
+    for char in chars:
+        score *= 5
+        score += incomplete_char_score[char]
+    return score
 
 
 if __name__ == '__main__':
@@ -26,8 +37,10 @@ if __name__ == '__main__':
 
     # For each line, track whether the line is corrupted, incomplete, or valid
     line_status = []
-    # First corrupted char on each corrupted line, indexed by line number
+    # Save first corrupted char on each corrupted line, indexed by line number
     corrupted_chars = {}
+    # Save leftover unmatched chars on each incomplete line, indexed by line number
+    incomplete_chars = {}
 
     ## Part 1
     for n, line in enumerate(lines):
@@ -59,88 +72,33 @@ if __name__ == '__main__':
             if len(unmatched_chars) > 0:
                 line_status.append(Status.Incomplete)
 
+                # Store the remaining, unmatched chars for this line
+                incomplete_chars[n] = unmatched_chars
+
             # Otherwise, the line is valid
             else:
                 line_status.append(Status.Valid)
 
-    syntax_error_score = sum( [illegal_char_score[c] for c in corrupted_chars.values()] )
+    syntax_error_score = sum( [corrupted_char_score[c] for c in corrupted_chars.values()] )
 
     print(f"[Part 1] Out of {len(lines)} lines, {line_status.count(Status.Corrupted)} are corrupted, {line_status.count(Status.Incomplete)} are incomplete, and {line_status.count(Status.Valid)} are valid. The total syntax error score is {syntax_error_score}.")
 
+
     ## Part 2
+    # Keep track of the final total score for each incomplete line
+    line_scores = []
 
+    for chars in list(incomplete_chars.values()):
+        # Map each opening bracket in the reversed set of uncompleted chars to its corresponding closing bracket
+        rev_chars = chars.copy()
+        rev_chars.reverse()
 
+        completed_chars = []
+        for char in rev_chars:
+            completed_chars.append(char_pairs[char])
 
+        line_scores.append( getLineScore(completed_chars) )
 
+    middle_score = sorted(line_scores)[ceil(len(line_scores)/2) - 1]
 
-### First draft
-#
-# def parseChunk():
-#     ...
-#
-# class Chunk():
-#     def __init__(self, chars, isCorrputed):
-#         self.chars = deque(chars)
-#         self.isCorrputed = isCorrputed
-#
-#
-# if __name__ == '__main__':
-#     with open('test_input.txt', 'r') as f:
-#         lines = f.readlines()
-#         print(lines)
-#
-#     # List of Chunk objects for each line
-#     chunks = []
-#
-#     TEST = []
-#
-#     for line in lines:
-#         chars = list(line.strip())
-#
-#         chunks_in_line = []
-#         bnd_left = 0
-#         depth = 0
-#
-#         for i, char in enumerate(chars):
-#             if char in open_chars:
-#                 depth += 1
-#             elif char in close_chars:
-#                 depth -= 1
-#
-#             TEST.append(depth)
-#
-#             # Once the depth returns to 0
-#             if depth == 0:
-#                 bnds = Bounds(bnd_left, i)
-#                 bnd_left = i
-#
-#                 # If the start of this "chunk" isn't a valid open char, mark line as corrupted
-#                 if not chars[bnds.left] in open_chars:
-#                     chunks_in_line.append( Chunk(chars[bnds.left:bnds.right+1], isCorrputed=True) )
-#
-#                 # If the ends of chars at the same depth don't match, mark line as corrupted
-#                 elif char_pairs[chars[bnds.left]] != chars[bnds.right]:
-#                     chunks_in_line.append( Chunk(chars[bnds.left:bnds.right+1], isCorrputed=True) )
-#
-#                 else:
-#                     chunks_in_line.append( Chunk(chars[bnds.left:bnds.right+1], isCorrputed=False) )
-#
-#
-#         else:
-#             # If the depth doesn't return to 0 at the end of a line, the line is incomplete
-#             if depth != 0:
-#                 chunks.append(chunks_in_line)
-#
-#             # Otherwise, this is a complete line, so we'll save the chunks
-#             else:
-#                 chunks.append(chunks_in_line)
-#
-#             TEST.append('--------')
-#
-#     print(TEST)
-#
-#
-#     for line in chunks:
-#         for chunk in line:
-#             print(chunk.chars)
-#             print(chunk.isCorrputed)
+    print(f"[Part 2] The middle score for incomplete lines is {middle_score}.")
