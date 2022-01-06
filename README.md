@@ -149,3 +149,10 @@
 
 #### [Part 2] Basin Scanning
 ![Day 9 - Basin Scanning](day09/anim/day09_basinscan_800_med.png)
+
+### Day 10
+```
+> python day10.py
+
+[Part 1] Out of 94 lines, 47 are corrupted, 47 are incomplete, and 0 are valid. The total syntax error score is 311949.
+```
