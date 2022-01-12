@@ -1,7 +1,7 @@
 ## Advent of Code 2021: Day 11
 ## https://adventofcode.com/2021/day/11
 ## Jesse Williams | github.com/xram64
-## Answers: [Part 1]: 1741, [Part 2]:
+## Answers: [Part 1]: 1741, [Part 2]: 440
 
 import numpy as np
 
@@ -76,11 +76,35 @@ if __name__ == '__main__':
 
 
     ## Part 1
-    MAXSTEPS_PART1 = 100
+    STEPS = 100
     flash_count = 0
 
-    for t in range(MAXSTEPS_PART1):
+    for t in range(STEPS):
         flash_count += advanceOctopi(octogrid)
         octogrid_states.append(octogrid.copy())
 
     print(f"[Part 1] After 100 steps, a total of {flash_count} octopus flashes occurred.")
+
+
+    ## Part 2
+    step_count = 0
+    flash_count = 0
+
+    # Reset grid to initial state
+    octogrid = octogrid_states[0].copy()
+    octogrid_states = []
+
+    octopi_synchronized = False
+    while not octopi_synchronized:
+        step_count += 1
+
+        flashes = advanceOctopi(octogrid)
+        flash_count += flashes
+
+        octogrid_states.append(octogrid.copy())
+
+        # If there were as many flashes as octopi in the grid, they all must have flashed simultaneously.
+        if flashes == octogrid.size:
+            octopi_synchronized = True
+
+    print(f"[Part 2] All octopi flash simultaneously on step {step_count}, after a total of {flash_count} flashes.")

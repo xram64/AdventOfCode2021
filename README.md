@@ -160,7 +160,8 @@
 
 ### Day 11
 ```
-> python day10.py
+> python day11.py
 
 [Part 1] After 100 steps, a total of 1741 octopus flashes occurred.
+[Part 2] All octopi flash simultaneously on step 440, after a total of 7085 flashes.
 ```
